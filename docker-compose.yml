@@ -1,0 +1,79 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: test-redis
+    restart: on-failure
+    ports:
+      - "6379:6379"
+    logging:
+      options:
+        max-size: 10m
+    healthcheck:
+      test: ['CMD', 'redis-server', '-v']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  scylla:
+    container_name: crypto-scylla
+    image: scylladb/scylla:latest
+    restart: on-failure
+    ports:
+      - '9042:9042'
+    healthcheck:
+      test: ['CMD', 'nodetool', 'status']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    logging:
+      options:
+        max-size: 10m
+
+  garnet:
+    image: 'ghcr.io/microsoft/garnet'
+    container_name: test-garnet
+    ulimits:
+      memlock: -1
+    ports:
+      - "16379:6379"
+    restart: always
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-h', 'localhost', '-p', '16379', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    container_name: test-clickhouse
+    ports:
+      - "8123:8123"  # HTTP интерфейс
+      - "9000:9000"  # TCP интерфейс
+      - "9009:9009"  # Inter-server replication
+    environment:
+      - CLICKHOUSE_DB=default
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=
+    restart: always
+    healthcheck:
+      test: ['CMD', 'clickhouse-client', '--query', 'SELECT 1']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  keydb:
+    image: eqalpha/keydb:latest
+    container_name: test-keydb
+    ports:
+      - "6378:6379"
+    restart: always
+    healthcheck:
+      test: ['CMD', 'keydb-server', '-v']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
