@@ -25,6 +25,17 @@ class MongoTest(AbstractTest):
         print(f' {duration:.2f} секунд')
         return duration
 
+    def write_optimized(self) -> float:
+        """Тестирование записи в Mongo с использованием пакетного запроса"""
+        bar = Bar(f'{self.name:<15} | {"запись":<10}', max=1)
+        start_time = time.time()
+        for _ in range(1):
+            self.client.test_db.data.insert_many([{'key': key, 'value': value} for key, value in self.data.items()])
+            bar.next()
+        duration = time.time() - start_time
+        print(f' {duration:.2f} секунд')
+        return duration
+
     def read(self) -> float:
         """Тестирование чтения из Mongo"""
         bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
@@ -32,6 +43,20 @@ class MongoTest(AbstractTest):
         for key, value in self.data.items():
             result = self.client.test_db.data.find_one({'key': key})
             assert result['value'] == value
+            bar.next()
+        duration = time.time() - start_time
+        print(f' {duration:.2f} секунд')
+        return duration
+
+    def read_optimized(self) -> float:
+        """Тестирование чтения из Mongo с использованием пакетного запроса"""
+        bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
+        start_time = time.time()
+        keys = list(self.data.keys())
+        result = self.client.test_db.data.find({'key': {'$in': keys}})
+        result_dict = {item['key']: item['value'] for item in result}
+        for key in keys:
+            assert result_dict.get(key) == self.data[key]
             bar.next()
         duration = time.time() - start_time
         print(f' {duration:.2f} секунд')

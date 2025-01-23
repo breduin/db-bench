@@ -9,3 +9,11 @@ class AbstractTest(ABC):
     @abstractmethod
     def read(self):
         raise NotImplementedError
+
+    @abstractmethod
+    def write_optimized(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def read_optimized(self):
+        raise NotImplementedError
