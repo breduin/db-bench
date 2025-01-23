@@ -6,6 +6,7 @@ from progress.bar import Bar
 
 
 class ScyllaTest(AbstractTest):
+    name = 'Scylla'
     def __init__(self, data):
         self.cluster = Cluster(['localhost'])
         self.session = self.cluster.connect()
@@ -23,23 +24,23 @@ class ScyllaTest(AbstractTest):
 
     def write(self) -> float:
         """Тестирование записи в Scylla"""
-        bar = Bar('Scylla|запись', max=len(self.data))
+        bar = Bar(f'{self.name:<15} | {"запись":<10}', max=len(self.data))
         start_time = time.time()
         for key, value in self.data.items():
             self.session.execute("INSERT INTO test.data (key, value) VALUES (%s, %s)", (key, value))
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд\n')
+        print(f' {duration:.2f} секунд')
         return duration
 
     def read(self) -> float:
         """Тестирование чтения из Scylla"""
-        bar = Bar('Scylla|чтение', max=len(self.data))
+        bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
         start_time = time.time()
         for key, value in self.data.items():
             result = self.session.execute("SELECT * FROM test.data WHERE key = %s", (key,)).one()
             assert result.value == value
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд\n')
+        print(f' {duration:.2f} секунд')
         return duration

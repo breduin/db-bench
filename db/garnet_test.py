@@ -6,6 +6,7 @@ from progress.bar import Bar
 
 
 class GarnetTest(AbstractTest):
+    name = 'Garnet'
     def __init__(self, data):
         self.data = data
         self.r = redis.Redis(host='localhost', port=16379)
@@ -13,7 +14,7 @@ class GarnetTest(AbstractTest):
 
     def write(self) -> float:
         """Тестирование записи в Garnet"""
-        bar = Bar('Garnet|запись', max=len(self.data))
+        bar = Bar(f'{self.name:<15} | {"запись":<10}', max=len(self.data))
         start_time = time.time()
         for key, value in self.data.items():
             self.r.set(key, value)
@@ -24,7 +25,7 @@ class GarnetTest(AbstractTest):
 
     def read(self) -> float:
         """Тестирование чтения из Garnet"""
-        bar = Bar('Garnet|чтение', max=len(self.data))
+        bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
         start_time = time.time()
         for key, value in self.data.items():
             result = self.r.get(key)

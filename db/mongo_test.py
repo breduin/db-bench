@@ -7,6 +7,7 @@ from progress.bar import Bar
 
 
 class MongoTest(AbstractTest):
+    name = 'Mongo'
     def __init__(self, data):
         self.data = data
         self.client = MongoClient('localhost', 27017)
@@ -15,23 +16,23 @@ class MongoTest(AbstractTest):
 
     def write(self) -> float:
         """Тестирование записи в Mongo"""
-        bar = Bar('Mongo|запись', max=len(self.data))
+        bar = Bar(f'{self.name:<15} | {"запись":<10}', max=len(self.data))
         start_time = time.time()
         for key, value in self.data.items():
             self.client.test_db.data.insert_one({'key': key, 'value': value})
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд\n')
+        print(f' {duration:.2f} секунд')
         return duration
 
     def read(self) -> float:
         """Тестирование чтения из Mongo"""
-        bar = Bar('Mongo|чтение', max=len(self.data))
+        bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
         start_time = time.time()
         for key, value in self.data.items():
             result = self.client.test_db.data.find_one({'key': key})
             assert result['value'] == value
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд\n')
+        print(f' {duration:.2f} секунд')
         return duration
