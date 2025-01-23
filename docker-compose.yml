@@ -16,7 +16,7 @@ services:
       start_period: 60s
 
   scylla:
-    container_name: crypto-scylla
+    container_name: test-scylla
     image: scylladb/scylla:latest
     restart: on-failure
     ports:
@@ -90,6 +90,19 @@ services:
     restart: always
     healthcheck:
       test: ['CMD', 'pg_isready']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  mongo:
+    image: mongo:latest
+    container_name: test-mongo
+    ports:
+      - "27017:27017"
+    restart: always
+    healthcheck:
+      test: ['CMD', 'mongo', '--eval', 'db.stats()']
       interval: 30s
       timeout: 10s
       retries: 5

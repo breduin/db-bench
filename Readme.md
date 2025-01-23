@@ -3,6 +3,8 @@
 - Clickhouse
 - Garnet
 - Keydb
+- Mongo
+- Postgresql
 - Redis
 - Scylla
 

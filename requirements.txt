@@ -3,3 +3,4 @@ progress
 redis
 scylla-driver
 psycopg2
+pymongo

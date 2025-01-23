@@ -2,12 +2,13 @@ import random
 import string
 
 from db import (
-    ScyllaTest,
-    RedisTest,
     ClickhouseTest,
     GarnetTest,
     KeydbTest,
+    MongoTest,
     PostgresqlTest,
+    RedisTest,
+    ScyllaTest,
 )
 
 # Параметры тестирования
@@ -27,10 +28,11 @@ def main():
     databases = {
         'clickhouse': ClickhouseTest(data),
         'garnet': GarnetTest(data),
+        'keydb': KeydbTest(data),
+        'mongo': MongoTest(data),
+        'postgresql': PostgresqlTest(data),
         'redis': RedisTest(data),
         'scylla': ScyllaTest(data),
-        'keydb': KeydbTest(data),
-        'postgresql': PostgresqlTest(data),
     }
 
     write_results = {}
@@ -77,4 +79,9 @@ def print_results(write_results, read_results):
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Тестирование прервано пользователем")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
