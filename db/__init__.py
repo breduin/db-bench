@@ -5,6 +5,7 @@ from .mongo_test import MongoTest
 from .postgresql_test import PostgresqlTest
 from .redis_test import RedisTest
 from .scylla_test import ScyllaTest
+from .tarantool_test import TarantoolTest
 
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     'PostgresqlTest',
     'RedisTest',
     'ScyllaTest',
+    'TarantoolTest',
 ]

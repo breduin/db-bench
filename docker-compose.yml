@@ -107,3 +107,19 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+
+  tarantool:
+    image: tarantool/tarantool:latest
+    container_name: test-tarantool
+    ports:
+      - "3301:3301"
+    restart: always
+    command: tarantool tarantool.lua
+    volumes:
+      - ./db/tarantool:/opt/tarantool
+    healthcheck:
+      test: ['CMD', 'tarantool', 'test.lua']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s

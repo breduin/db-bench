@@ -9,10 +9,11 @@ from db import (
     PostgresqlTest,
     RedisTest,
     ScyllaTest,
+    TarantoolTest,
 )
 
 # Параметры тестирования
-NUM_RECORDS = 10_000  # Количество записей
+NUM_RECORDS = 10_00  # Количество записей
 VALUE_LENGTH = 1_000  # Длина записи
 
 
@@ -33,6 +34,7 @@ def main():
         'postgresql': PostgresqlTest(data),
         'redis': RedisTest(data),
         'scylla': ScyllaTest(data),
+        'tarantool': TarantoolTest(data),
     }
 
     write_results = {}

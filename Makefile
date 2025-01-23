@@ -31,6 +31,12 @@ log-clickhouse:
 log-keydb:
 	docker logs $(PROJECT_NAME)-keydb -f --tail=100
 
+log-postgres:
+	docker logs $(PROJECT_NAME)-postgres -f --tail=100
+
+log-tarantool:
+	docker logs $(PROJECT_NAME)-tarantool -f --tail=100
+
 log-tester:
 	docker logs $(PROJECT_NAME)-tester -f --tail=100
 

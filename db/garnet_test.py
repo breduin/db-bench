@@ -19,7 +19,7 @@ class GarnetTest(AbstractTest):
             self.r.set(key, value)
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд\n')
+        print(f' {duration:.2f} секунд')
         return duration
 
     def read(self) -> float:
@@ -31,5 +31,5 @@ class GarnetTest(AbstractTest):
             assert result.decode() == value
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд\n')
+        print(f' {duration:.2f} секунд')
         return duration
