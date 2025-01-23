@@ -7,6 +7,7 @@ from db import (
     ClickhouseTest,
     GarnetTest,
     KeydbTest,
+    PostgresqlTest,
 )
 
 # Параметры тестирования
@@ -29,6 +30,7 @@ def main():
         'redis': RedisTest(data),
         'scylla': ScyllaTest(data),
         'keydb': KeydbTest(data),
+        'postgresql': PostgresqlTest(data),
     }
 
     write_results = {}
