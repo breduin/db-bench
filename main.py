@@ -1,5 +1,6 @@
 import random
 import string
+import sys
 
 from db import (
     ClickhouseTest,
@@ -11,10 +12,10 @@ from db import (
     ScyllaTest,
 )
 
-
-# Параметры тестирования
-NUM_RECORDS = 10_000  # Количество записей
-VALUE_LENGTH = 1_000  # Длина записи
+# Количество записей
+NUM_RECORDS = int(sys.argv[1]) if len(sys.argv) > 1 else 10_000  
+# Длина записи
+VALUE_LENGTH = int(sys.argv[2]) if len(sys.argv) > 2 else 1_000  
 
 
 def generate_data():
@@ -56,7 +57,8 @@ def main():
             write_results[name] = client.write()
         except Exception as e:
             print(f"Ошибка записи в {name}: {e}")
-            exit(1)
+            write_results[name] = float("inf")
+            continue
 
     # Тесты на неоптимизированное чтение
     for name, client in databases.items():
@@ -64,7 +66,8 @@ def main():
             read_results[name] = client.read()
         except Exception as e:
             print(f"Ошибка чтения из {name}: {e}")
-            exit(1)
+            read_results[name] = float("inf")
+            continue
 
     print("-" * 50)
     print("Тесты с пакетным запросом")
@@ -76,7 +79,8 @@ def main():
             write_optimized_results[name] = client.write_optimized()
         except Exception as e:
             print(f"Ошибка записи в {name}: {e}")
-            exit(1)
+            write_optimized_results[name] = float("inf")
+            continue
 
     # Тесты на оптимизированное чтение
     for name, client in databases.items():
@@ -84,7 +88,8 @@ def main():
             read_optimized_results[name] = client.read_optimized()
         except Exception as e:
             print(f"Ошибка чтения из {name}: {e}")
-            exit(1)
+            read_optimized_results[name] = float("inf")
+            continue
 
     print_results(
         write_results, read_results, write_optimized_results, read_optimized_results

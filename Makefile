@@ -34,8 +34,8 @@ log-keydb:
 log-postgres:
 	docker logs $(PROJECT_NAME)-postgres -f --tail=100
 
-log-tarantool:
-	docker logs $(PROJECT_NAME)-tarantool -f --tail=100
+log-mongo:
+	docker logs $(PROJECT_NAME)-mongo -f --tail=100
 
 log-tester:
 	docker logs $(PROJECT_NAME)-tester -f --tail=100
@@ -58,7 +58,8 @@ shell-clickhouse:
 shell-keydb:
 	docker exec -it $(PROJECT_NAME)-keydb /bin/bash
 
-run-test:
-	make run
-	. env/bin/activate && python main.py
-	make stop
+shell-postgres:
+	docker exec -it $(PROJECT_NAME)-postgres /bin/bash
+
+shell-mongo:
+	docker exec -it $(PROJECT_NAME)-mongo /bin/bash

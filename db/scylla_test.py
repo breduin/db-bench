@@ -49,7 +49,7 @@ class ScyllaTest(AbstractTest):
         data_to_insert = [
             {"key": key, "value": value} for key, value in self.data.items()
         ]
-        batch_size = 500  # Максимальный размер пакета
+        batch_size = 500
         for i in range(0, len(data_to_insert), batch_size):
             batch = BatchStatement()  # Создание экземпляра BatchStatement
             for d in data_to_insert[i : i + batch_size]:
