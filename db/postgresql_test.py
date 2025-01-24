@@ -7,18 +7,27 @@ from progress.bar import Bar
 
 
 class PostgresqlTest(AbstractTest):
-    name = 'Postgresql'
+    name = "Postgresql"
+
     def __init__(self, data):
         self.data = data
-        self.client = psycopg2.connect(host='localhost', port=5432, database='test', user='postgres', password='postgres')
+        self.client = psycopg2.connect(
+            host="localhost",
+            port=5432,
+            database="test",
+            user="postgres",
+            password="postgres",
+        )
         with self.client.cursor() as cursor:
             cursor.execute("DROP TABLE IF EXISTS data")
-            cursor.execute("""
+            cursor.execute(
+                """
                 CREATE TABLE IF NOT EXISTS data (
                     key VARCHAR,
                     value VARCHAR
                 )
-            """)
+            """
+            )
 
     def write(self) -> float:
         """Тестирование записи в Postgresql"""
@@ -26,12 +35,13 @@ class PostgresqlTest(AbstractTest):
         start_time = time.time()
         with self.client.cursor() as cursor:
             for key, value in self.data.items():
-                cursor.execute("INSERT INTO data (key, value) VALUES (%s, %s)", (key, value))
+                cursor.execute(
+                    "INSERT INTO data (key, value) VALUES (%s, %s)", (key, value)
+                )
                 bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-
 
     def write_optimized(self) -> float:
         """Тестирование записи в Postgresql с использованием пакетного запроса"""
@@ -39,11 +49,16 @@ class PostgresqlTest(AbstractTest):
         start_time = time.time()
         with self.client.cursor() as cursor:
             # Подготовка данных для пакетной вставки
-            data_to_insert = [{'key': key, 'value': value} for key, value in self.data.items()]
-            cursor.executemany("INSERT INTO data (key, value) VALUES (%s, %s)", [(d['key'], d['value']) for d in data_to_insert])
+            data_to_insert = [
+                {"key": key, "value": value} for key, value in self.data.items()
+            ]
+            cursor.executemany(
+                "INSERT INTO data (key, value) VALUES (%s, %s)",
+                [(d["key"], d["value"]) for d in data_to_insert],
+            )
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
 
     def read(self) -> float:
@@ -57,7 +72,7 @@ class PostgresqlTest(AbstractTest):
                 assert result[0][0] == value
                 bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
 
     def read_optimized(self) -> float:
@@ -74,5 +89,5 @@ class PostgresqlTest(AbstractTest):
             assert result_dict[key] == self.data[key]
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration

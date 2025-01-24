@@ -8,12 +8,11 @@ from .scylla_test import ScyllaTest
 
 
 __all__ = [
-    'ClickhouseTest',
-    'GarnetTest',
-    'KeydbTest',
-    'MongoTest',
-    'PostgresqlTest',
-    'RedisTest',
-    'ScyllaTest',
-    'TarantoolTest',
+    "ClickhouseTest",
+    "GarnetTest",
+    "KeydbTest",
+    "MongoTest",
+    "PostgresqlTest",
+    "RedisTest",
+    "ScyllaTest",
 ]

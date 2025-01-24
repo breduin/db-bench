@@ -6,10 +6,11 @@ from progress.bar import Bar
 
 
 class KeydbTest(AbstractTest):
-    name = 'Keydb'
+    name = "Keydb"
+
     def __init__(self, data):
         self.data = data
-        self.r = redis.Redis(host='localhost', port=6378)
+        self.r = redis.Redis(host="localhost", port=6378)
         self.r.flushall()  # Очистка всех данных в KeyDB
 
     def write(self) -> float:
@@ -20,9 +21,9 @@ class KeydbTest(AbstractTest):
             self.r.set(key, value)
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-    
+
     def write_optimized(self) -> float:
         """Тестирование записи в KeyDB с использованием пакетного запроса"""
         bar = Bar(f'{self.name:<15} | {"запись":<10}', max=1)
@@ -31,9 +32,9 @@ class KeydbTest(AbstractTest):
             self.r.mset(self.data)
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-    
+
     def read(self) -> float:
         """Тестирование чтения из KeyDB"""
         bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
@@ -43,9 +44,9 @@ class KeydbTest(AbstractTest):
             assert result.decode() == value
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-    
+
     def read_optimized(self) -> float:
         """Тестирование чтения из KeyDB с использованием пакетного запроса"""
         bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
@@ -57,5 +58,5 @@ class KeydbTest(AbstractTest):
             assert result_dict[key] == self.data[key]
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration

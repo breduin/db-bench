@@ -6,10 +6,11 @@ from progress.bar import Bar
 
 
 class GarnetTest(AbstractTest):
-    name = 'Garnet'
+    name = "Garnet"
+
     def __init__(self, data):
         self.data = data
-        self.r = redis.Redis(host='localhost', port=16379)
+        self.r = redis.Redis(host="localhost", port=16379)
         self.r.flushall()  # Очистка всех данных в Garnet
 
     def write(self) -> float:
@@ -20,9 +21,8 @@ class GarnetTest(AbstractTest):
             self.r.set(key, value)
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-
 
     def write_optimized(self) -> float:
         """Тестирование записи в Garnet с использованием пакетного запроса"""
@@ -35,7 +35,7 @@ class GarnetTest(AbstractTest):
             self.r.mset(mapping)
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
 
     def read(self) -> float:
@@ -47,7 +47,7 @@ class GarnetTest(AbstractTest):
             assert result.decode() == value
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
 
     def read_optimized(self) -> float:
@@ -57,10 +57,12 @@ class GarnetTest(AbstractTest):
         keys = list(self.data.keys())
         # Используем MGET для получения значений по множеству ключей
         result = self.r.mget(keys)
-        result_dict = {key: value.decode() for key, value in zip(keys, result) if value is not None}
+        result_dict = {
+            key: value.decode() for key, value in zip(keys, result) if value is not None
+        }
         for key in keys:
             assert result_dict[key] == self.data[key]
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration

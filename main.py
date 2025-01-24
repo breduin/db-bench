@@ -11,6 +11,7 @@ from db import (
     ScyllaTest,
 )
 
+
 # Параметры тестирования
 NUM_RECORDS = 10_000  # Количество записей
 VALUE_LENGTH = 1_000  # Длина записи
@@ -18,7 +19,12 @@ VALUE_LENGTH = 1_000  # Длина записи
 
 def generate_data():
     """Генерация данных для записи в базы данных"""
-    return {f'key_{i}': ''.join(random.choices(string.ascii_letters + string.digits, k=VALUE_LENGTH)) for i in range(NUM_RECORDS)}
+    return {
+        f"key_{i}": "".join(
+            random.choices(string.ascii_letters + string.digits, k=VALUE_LENGTH)
+        )
+        for i in range(NUM_RECORDS)
+    }
 
 
 def main():
@@ -26,13 +32,13 @@ def main():
     data = generate_data()
 
     databases = {
-        'clickhouse': ClickhouseTest(data),
-        'garnet': GarnetTest(data),
-        'keydb': KeydbTest(data),
-        'mongo': MongoTest(data),
-        'postgresql': PostgresqlTest(data),
-        'redis': RedisTest(data),
-        'scylla': ScyllaTest(data),
+        "clickhouse": ClickhouseTest(data),
+        "garnet": GarnetTest(data),
+        "keydb": KeydbTest(data),
+        "mongo": MongoTest(data),
+        "postgresql": PostgresqlTest(data),
+        "redis": RedisTest(data),
+        "scylla": ScyllaTest(data),
     }
 
     write_results = {}
@@ -42,9 +48,9 @@ def main():
     read_optimized_results = {}
 
     # Тесты на неоптимизированную запись
-    print('-' * 50)
-    print('Неоптимизированные тесты')
-    print('-' * 50)
+    print("-" * 50)
+    print("Неоптимизированные тесты")
+    print("-" * 50)
     for name, client in databases.items():
         try:
             write_results[name] = client.write()
@@ -60,9 +66,9 @@ def main():
             print(f"Ошибка чтения из {name}: {e}")
             exit(1)
 
-    print('-' * 50)
-    print('Тесты с пакетным запросом')
-    print('-' * 50)
+    print("-" * 50)
+    print("Тесты с пакетным запросом")
+    print("-" * 50)
 
     # Тесты на оптимизированную запись
     for name, client in databases.items():
@@ -80,10 +86,14 @@ def main():
             print(f"Ошибка чтения из {name}: {e}")
             exit(1)
 
-    print_results(write_results, read_results, write_optimized_results, read_optimized_results)
+    print_results(
+        write_results, read_results, write_optimized_results, read_optimized_results
+    )
 
 
-def print_results(write_results, read_results, write_optimized_results, read_optimized_results):
+def print_results(
+    write_results, read_results, write_optimized_results, read_optimized_results
+):
     # Находим минимальные значения
     min_write_time = min(write_results.values())
     min_read_time = min(read_results.values())
@@ -95,8 +105,12 @@ def print_results(write_results, read_results, write_optimized_results, read_opt
     sorted_write_results = dict(sorted(write_results.items(), key=lambda item: item[1]))
     sorted_read_results = dict(sorted(read_results.items(), key=lambda item: item[1]))
 
-    sorted_write_optimized_results = dict(sorted(write_optimized_results.items(), key=lambda item: item[1]))
-    sorted_read_optimized_results = dict(sorted(read_optimized_results.items(), key=lambda item: item[1]))
+    sorted_write_optimized_results = dict(
+        sorted(write_optimized_results.items(), key=lambda item: item[1])
+    )
+    sorted_read_optimized_results = dict(
+        sorted(read_optimized_results.items(), key=lambda item: item[1])
+    )
 
     print("\nКоличество записей:", NUM_RECORDS)
     print("Длина одной записи:", VALUE_LENGTH)
@@ -128,7 +142,9 @@ def print_results(write_results, read_results, write_optimized_results, read_opt
         if time == min_write_optimized_time:
             print(f"{db:<15} {time:.2f} {'(самая быстрая)'}")
         else:
-            percent_slower = ((time - min_write_optimized_time) / min_write_optimized_time) * 100
+            percent_slower = (
+                (time - min_write_optimized_time) / min_write_optimized_time
+            ) * 100
             print(f"{db:<15} {time:.2f} ({percent_slower:.2f}% медленнее)")
 
     print("\nРезультаты тестирования чтения (с пакетным запросом):")
@@ -138,7 +154,9 @@ def print_results(write_results, read_results, write_optimized_results, read_opt
         if time == min_read_optimized_time:
             print(f"{db:<15} {time:.2f} {'(самая быстрая)'}")
         else:
-            percent_slower = ((time - min_read_optimized_time) / min_read_optimized_time) * 100
+            percent_slower = (
+                (time - min_read_optimized_time) / min_read_optimized_time
+            ) * 100
             print(f"{db:<15} {time:.2f} ({percent_slower:.2f}% медленнее)")
 
 

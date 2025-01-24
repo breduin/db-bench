@@ -6,10 +6,11 @@ from progress.bar import Bar
 
 
 class RedisTest(AbstractTest):
-    name = 'Redis'
+    name = "Redis"
+
     def __init__(self, data):
         self.data = data
-        self.r = redis.Redis(host='localhost', port=6379)
+        self.r = redis.Redis(host="localhost", port=6379)
         self.r.flushall()  # Очистка всех данных в Redis
 
     def write(self) -> float:
@@ -20,9 +21,9 @@ class RedisTest(AbstractTest):
             self.r.set(key, value)
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-    
+
     def write_optimized(self) -> float:
         """Тестирование записи в Redis с использованием пакетного запроса"""
         bar = Bar(f'{self.name:<15} | {"запись":<10}', max=1)
@@ -31,9 +32,9 @@ class RedisTest(AbstractTest):
             self.r.mset({key: value for key, value in self.data.items()})
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-    
+
     def read(self) -> float:
         """Тестирование чтения из Redis"""
         bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
@@ -43,9 +44,9 @@ class RedisTest(AbstractTest):
             assert result.decode() == value
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
-    
+
     def read_optimized(self) -> float:
         """Тестирование чтения из Redis с использованием пакетного запроса"""
         bar = Bar(f'{self.name:<15} | {"чтение":<10}', max=len(self.data))
@@ -57,5 +58,5 @@ class RedisTest(AbstractTest):
             assert result_dict[key] == self.data[key]
             bar.next()
         duration = time.time() - start_time
-        print(f' {duration:.2f} секунд')
+        print(f" {duration:.2f} секунд")
         return duration
