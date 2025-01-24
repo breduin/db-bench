@@ -7,7 +7,6 @@
 - Postgresql
 - Redis
 - Scylla
-- Tarantool
 
 ## Настройка
 
