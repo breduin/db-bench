@@ -11,7 +11,10 @@ class RedisTest(AbstractTest):
     def __init__(self, data):
         self.data = data
         self.r = redis.Redis(host="localhost", port=6379)
-        self.r.flushall()  # Очистка всех данных в Redis
+        self.clear()
+
+    def clear(self):
+        self.r.flushall()
 
     def write(self) -> float:
         """Тестирование записи в Redis"""

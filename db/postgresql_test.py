@@ -18,6 +18,9 @@ class PostgresqlTest(AbstractTest):
             user="postgres",
             password="postgres",
         )
+        self.clear()
+
+    def clear(self):
         with self.client.cursor() as cursor:
             cursor.execute("DROP TABLE IF EXISTS data")
             cursor.execute(

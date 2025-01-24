@@ -11,6 +11,9 @@ class ClickhouseTest(AbstractTest):
     def __init__(self, data):
         self.data = data
         self.client = Client(host="localhost", port=9000)
+        self.clear()
+
+    def clear(self):
         self.client.execute("DROP TABLE IF EXISTS data")
         self.client.execute(
             """

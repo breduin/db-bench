@@ -11,7 +11,10 @@ class GarnetTest(AbstractTest):
     def __init__(self, data):
         self.data = data
         self.r = redis.Redis(host="localhost", port=16379)
-        self.r.flushall()  # Очистка всех данных в Garnet
+        self.clear()
+
+    def clear(self):
+        self.r.flushall()
 
     def write(self) -> float:
         """Тестирование записи в Garnet"""

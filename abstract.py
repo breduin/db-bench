@@ -3,6 +3,10 @@ from abc import ABC, abstractmethod
 
 class AbstractTest(ABC):
     @abstractmethod
+    def clear(self):
+        raise NotImplementedError
+
+    @abstractmethod
     def write(self):
         raise NotImplementedError
 

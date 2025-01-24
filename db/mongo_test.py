@@ -12,10 +12,10 @@ class MongoTest(AbstractTest):
     def __init__(self, data):
         self.data = data
         self.client = MongoClient("localhost", 27017)
+        self.clear()
+
+    def clear(self):
         self.client.test_db.data.drop()
-        self.client.test_db.data.insert_many(
-            [{"key": key, "value": value} for key, value in self.data.items()]
-        )
 
     def write(self) -> float:
         """Тестирование записи в Mongo"""

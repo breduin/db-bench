@@ -12,6 +12,7 @@ from db import (
     ScyllaTest,
 )
 
+
 # Количество записей
 NUM_RECORDS = int(sys.argv[1]) if len(sys.argv) > 1 else 10_000  
 # Длина записи
@@ -69,9 +70,16 @@ def main():
             read_results[name] = float("inf")
             continue
 
+
+    # Очистка баз данных
+    for name, client in databases.items():
+        client.clear()
+
+
     print("-" * 50)
     print("Тесты с пакетным запросом")
     print("-" * 50)
+
 
     # Тесты на оптимизированную запись
     for name, client in databases.items():

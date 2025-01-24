@@ -12,7 +12,10 @@ class ScyllaTest(AbstractTest):
     def __init__(self, data):
         self.cluster = Cluster(["localhost"])
         self.session = self.cluster.connect()
-        # Полная очистка БД
+        self.data = data
+        self.clear()
+
+    def clear(self):
         self.session.execute("DROP KEYSPACE IF EXISTS test;")
         self.session.execute(
             "CREATE KEYSPACE IF NOT EXISTS test WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};"
@@ -26,7 +29,6 @@ class ScyllaTest(AbstractTest):
         )
         """
         )
-        self.data = data
 
     def write(self) -> float:
         """Тестирование записи в Scylla"""
