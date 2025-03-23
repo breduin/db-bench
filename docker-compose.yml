@@ -107,3 +107,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"

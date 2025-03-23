@@ -10,6 +10,7 @@ from db import (
     PostgresqlTest,
     RedisTest,
     ScyllaTest,
+    MariaDBTest,
 )
 
 
@@ -41,6 +42,7 @@ def main():
         "postgresql": PostgresqlTest(data),
         "redis": RedisTest(data),
         "scylla": ScyllaTest(data),
+        "mariadb": MariaDBTest(data),
     }
 
     write_results = {}
